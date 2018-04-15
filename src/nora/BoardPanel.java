@@ -5,10 +5,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.GridLayout;
 import java.awt.Insets;
-import javafx.scene.layout.GridPane;
-import javafx.scene.text.Text;
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -24,9 +21,7 @@ public class BoardPanel extends JPanel {
      */
     public BoardPanel() {
         gridLayout = new GridBagLayout();
-        
-        setLayout(new GridBagLayout());
-        
+        setLayout(new GridBagLayout());        
     }
     
     private void setupTitlePane(String heading, String text){
@@ -83,14 +78,29 @@ public class BoardPanel extends JPanel {
     public void setQuestion(Question question){
         removeAll();
         setupTitlePane("Question",question.getQuestion());
+        DB db =  new DB();
         
         JPanel answersPanel = new JPanel();
+        answersPanel.setLayout(new BoxLayout(answersPanel, BoxLayout.PAGE_AXIS));
         
         for(int i = 0; i < question.getAnswers().size();i++){
             Answer answer = question.getAnswers().get(i);
-            JPanel qPanel = new JPanel(new BorderLayout());
+            JPanel qPanel = new JPanel(new GridBagLayout());
+            
+            GridBagConstraints c= new GridBagConstraints();
+            c.gridx = 0;
+            c.gridy = 0;
+            c.weightx = 10;
+            c.weighty = 1.0;
+            c.fill = GridBagConstraints.HORIZONTAL;
+            qPanel.add(new JLabel(db.getUsername(answer.getUserId())), c);
+            
+            GridBagConstraints c2= new GridBagConstraints();
+            c2.gridx = 0;
+            c2.gridy = 1;
+            c2.fill = GridBagConstraints.HORIZONTAL;
             JTextArea textArea = new JTextArea(answer.getAnswer());
-            qPanel.add(textArea);
+            qPanel.add(textArea,c2);
             textArea.setEditable(false);
             textArea.setBackground(Color.GRAY);
             textArea.setForeground(Color.WHITE);
